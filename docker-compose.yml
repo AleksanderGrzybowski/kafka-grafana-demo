@@ -1,7 +1,7 @@
 version: '3'
 services:
   kafka:
-    image: wurstmeister/kafka
+    image: wurstmeister/kafka:2.13-2.8.1
     ports:
     - "9092:9092"
     environment:
@@ -15,7 +15,7 @@ services:
     - "2181:2181"
     restart: always
   kafka-exporter:
-    image: danielqsj/kafka-exporter
+    image: danielqsj/kafka-exporter:v1.6.0
     command: --kafka.server=kafka:9092 --web.listen-address=:8080
     restart: always
     ports:
@@ -25,7 +25,6 @@ services:
     image: prom/prometheus:v2.36.2
     volumes:
     - ./:/etc/prometheus/
-      #- ./prometheus-storage:/tmp/prometheus
     command:
     - '--config.file=/etc/prometheus/prometheus.yml'
     - '--storage.tsdb.path=/tmp/prometheus'
@@ -35,7 +34,7 @@ services:
     - 9090:9090
     restart: always
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:9.1.7-ubuntu
     environment:
     - GF_AUTH_ANONYMOUS_ENABLED=true
     - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
